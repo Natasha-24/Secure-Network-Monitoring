@@ -1,0 +1,36 @@
+[
+    {
+        "incident_id": "INC-20260907095809",
+        "timestamp": "2026-09-07T09:58:09.440237",
+        "threat_type": "Possible Port Scan",
+        "severity": "HIGH",
+        "anomaly_score": 72.75,
+        "confidence": "High",
+        "detection_reasons": [
+            "packets_per_second increased by 24524.65%",
+            "syn_packets increased by 376.19%",
+            "unique_source_ips decreased by 33.33%",
+            "unique_destination_ips decreased by 71.43%",
+            "unique_destination_ports increased by 339.13%"
+        ],
+        "status": "OPEN",
+        "evidence": "C:\\Users\\Natasha Elizabeth\\Desktop\\CN\\backend\\data\\suspicious\\suspicious_traffic.pcapng"
+    },
+    {
+        "incident_id": "INC-20260909114440",
+        "timestamp": "2026-09-09T11:44:40.897869",
+        "threat_type": "Possible Port Scan",
+        "severity": "HIGH",
+        "anomaly_score": 72.75,
+        "confidence": "High",
+        "detection_reasons": [
+            "packets_per_second increased by 24524.65%",
+            "syn_packets increased by 376.19%",
+            "unique_source_ips decreased by 33.33%",
+            "unique_destination_ips decreased by 71.43%",
+            "unique_destination_ports increased by 339.13%"
+        ],
+        "status": "OPEN",
+        "evidence": "C:\\Users\\Natasha Elizabeth\\Desktop\\CN\\backend\\data\\suspicious\\suspicious_traffic.pcapng"
+    }
+]

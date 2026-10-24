@@ -1,0 +1,2 @@
+total_packets,total_bytes,duration,packets_per_second,average_packet_size,tcp_packets,udp_packets,icmp_packets,other_packets,syn_packets,ack_packets,rst_packets,unique_source_ips,unique_destination_ips,unique_destination_ports
+360.0,93795.0,167.51,2.15,260.54,273.0,24.0,10.0,53.0,42.0,252.0,0.0,3.0,7.0,23.0

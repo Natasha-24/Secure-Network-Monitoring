@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Secure Network Monitoring Platform
+    </title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="header-left">
+
+        <div class="logo">
+            SNM
+        </div>
+
+        <div>
+
+            <h1>
+                Secure Network Monitoring Platform
+            </h1>
+
+            <p>
+                Real-Time Threat Detection & Incident Response
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="system-indicator">
+
+        <span
+            id="systemDot"
+            class="status-dot"
+        ></span>
+
+        <span id="systemStatus">
+            Connecting...
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<main class="container">
+
+
+<!-- =========================================================
+     ACTIVE SECURITY ALERT
+========================================================= -->
+
+<section
+    id="alertBanner"
+    class="alert-banner hidden"
+>
+
+    <div class="alert-icon">
+        !
+    </div>
+
+    <div>
+
+        <strong id="alertTitle">
+            ACTIVE SECURITY ALERT
+        </strong>
+
+        <p id="alertMessage">
+            Suspicious activity detected.
+        </p>
+
+    </div>
+
+    <div class="alert-right">
+
+        <span id="alertSeverity">
+            HIGH
+        </span>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CONTROL PANEL
+========================================================= -->
+
+<section class="control-panel">
+
+    <div>
+
+        <h2>
+            Network Traffic Analysis
+        </h2>
+
+        <p id="liveBannerStatus">
+            ● ANALYSIS READY
+        </p>
+
+    </div>
+
+
+    <div class="controls">
+
+        <label for="trafficTypeSelect">
+            Traffic:
+        </label>
+
+        <select id="trafficTypeSelect">
+
+            <option value="normal">
+                Normal Traffic
+            </option>
+
+            <option value="suspicious" selected>
+                Suspicious Traffic
+            </option>
+
+        </select>
+
+
+        <button
+            id="analyzeBtn"
+            onclick="analyzeSelectedTraffic()"
+        >
+            Analyze Traffic
+        </button>
+
+
+        <button
+            id="liveBtn"
+            class="secondary-button"
+            onclick="toggleLiveMonitoring()"
+        >
+            Start Monitoring
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MAIN TELEMETRY CARDS
+========================================================= -->
+
+<section class="cards">
+
+
+    <div class="card">
+
+        <div class="card-title">
+            Anomaly Score
+        </div>
+
+        <div
+            id="anomalyScore"
+            class="card-value"
+        >
+            --
+        </div>
+
+        <div class="card-description">
+            Overall deviation score
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <div class="card-title">
+            Severity
+        </div>
+
+        <div
+            id="severity"
+            class="card-value"
+        >
+            --
+        </div>
+
+        <div class="card-description">
+            Current threat level
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <div class="card-title">
+            Threat Type
+        </div>
+
+        <div
+            id="threatType"
+            class="card-value threat"
+        >
+            --
+        </div>
+
+        <div class="card-description">
+            Classification
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <div class="card-title">
+            Detection Confidence
+        </div>
+
+        <div
+            id="confidence"
+            class="card-value"
+        >
+            --
+        </div>
+
+        <div class="card-description">
+            Classification confidence
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ALERT / INCIDENT COUNTERS
+========================================================= -->
+
+<section class="summary-strip">
+
+    <div class="summary-item">
+
+        <span>
+            Active Incidents
+        </span>
+
+        <strong id="activeIncidents">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="summary-item">
+
+        <span>
+            Total Incidents
+        </span>
+
+        <strong id="totalIncidents">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="summary-item">
+
+        <span>
+            Last Analysis
+        </span>
+
+        <strong id="lastUpdated">
+            --
+        </strong>
+
+    </div>
+
+
+    <div class="summary-item">
+
+        <span>
+            Evidence Status
+        </span>
+
+        <strong id="evidenceStatus">
+            READY
+        </strong>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TRAFFIC METRICS + ACTIVITY LOG
+========================================================= -->
+
+<section class="grid">
+
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Traffic Statistics
+                </h2>
+
+                <p>
+                    Current analyzed capture
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="metrics-grid">
+
+            <div>
+                <span>Total Packets</span>
+                <strong id="m_pkts">0</strong>
+            </div>
+
+
+            <div>
+                <span>TCP / UDP / ICMP</span>
+                <strong id="m_proto">
+                    0 / 0 / 0
+                </strong>
+            </div>
+
+
+            <div>
+                <span>SYN Packets</span>
+                <strong id="m_syn">
+                    0
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Unique IPs</span>
+                <strong id="m_ips">
+                    0 / 0
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Unique Dst Ports</span>
+                <strong id="m_ports">
+                    0
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Avg Packet Size</span>
+                <strong id="m_size">
+                    0 B
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Packets / Second</span>
+                <strong id="m_pps">
+                    0
+                </strong>
+            </div>
+
+
+            <div>
+                <span>RST Packets</span>
+                <strong id="m_rst">
+                    0
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Monitoring Activity Log
+                </h2>
+
+                <p>
+                    System and analysis events
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="activityLog"
+            class="log-container"
+        >
+
+            <div class="no-reason">
+                Awaiting monitoring initialization...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     BASELINE VS CURRENT
+========================================================= -->
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h2>
+                Baseline vs Current Traffic
+            </h2>
+
+            <p>
+                Comparison against normal traffic baseline
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="comparison-grid">
+
+
+        <div class="comparison-card">
+
+            <span>
+                Packets / Second
+            </span>
+
+            <div>
+
+                <strong id="cmp_pps_current">
+                    --
+                </strong>
+
+                <small id="cmp_pps_baseline">
+                    Baseline: --
+                </small>
+
+            </div>
+
+            <div
+                id="cmp_pps_change"
+                class="change-value"
+            >
+                --
+            </div>
+
+        </div>
+
+
+
+        <div class="comparison-card">
+
+            <span>
+                SYN Packets
+            </span>
+
+            <div>
+
+                <strong id="cmp_syn_current">
+                    --
+                </strong>
+
+                <small id="cmp_syn_baseline">
+                    Baseline: --
+                </small>
+
+            </div>
+
+            <div
+                id="cmp_syn_change"
+                class="change-value"
+            >
+                --
+            </div>
+
+        </div>
+
+
+
+        <div class="comparison-card">
+
+            <span>
+                Destination Ports
+            </span>
+
+            <div>
+
+                <strong id="cmp_ports_current">
+                    --
+                </strong>
+
+                <small id="cmp_ports_baseline">
+                    Baseline: --
+                </small>
+
+            </div>
+
+            <div
+                id="cmp_ports_change"
+                class="change-value"
+            >
+                --
+            </div>
+
+        </div>
+
+
+
+        <div class="comparison-card">
+
+            <span>
+                Packet Size
+            </span>
+
+            <div>
+
+                <strong id="cmp_size_current">
+                    --
+                </strong>
+
+                <small id="cmp_size_baseline">
+                    Baseline: --
+                </small>
+
+            </div>
+
+            <div
+                id="cmp_size_change"
+                class="change-value"
+            >
+                --
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CHARTS
+========================================================= -->
+
+<section class="grid graph-grid">
+
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Protocol Distribution
+                </h2>
+
+                <p>
+                    TCP, UDP and ICMP composition
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="chart-box">
+
+            <canvas id="trafficChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Anomaly Feature Breakdown
+                </h2>
+
+                <p>
+                    Current values compared with normal baseline
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="chart-box">
+
+            <canvas id="anomalyChart"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     DETECTION REASONS
+========================================================= -->
+
+<section class="panel incidents-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h2>
+                Why Was This Traffic Flagged?
+            </h2>
+
+            <p>
+                Features contributing to the anomaly decision
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div id="reasonsContainer">
+
+        <div class="no-reason">
+            No current anomalies detected.
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CAPTURE INFORMATION
+========================================================= -->
+
+<section class="grid">
+
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Capture Information
+                </h2>
+
+                <p>
+                    Evidence and analysis details
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="capture-info">
+
+            <div>
+                <span>Source</span>
+                <strong>
+                    Controlled Lab / Kali
+                </strong>
+            </div>
+
+            <div>
+                <span>Target</span>
+                <strong>
+                    Windows Host
+                </strong>
+            </div>
+
+            <div>
+                <span>Capture File</span>
+                <strong id="captureFile">
+                    --
+                </strong>
+            </div>
+
+            <div>
+                <span>Packets</span>
+                <strong id="capturePackets">
+                    --
+                </strong>
+            </div>
+
+            <div>
+                <span>Duration</span>
+                <strong id="captureDuration">
+                    --
+                </strong>
+            </div>
+
+            <div>
+                <span>Analysis</span>
+                <strong id="analysisStatus">
+                    --
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DETECTION PIPELINE
+    ====================================================== -->
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Detection Pipeline
+                </h2>
+
+                <p>
+                    Security analysis workflow
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="pipeline">
+
+            <div class="pipeline-step">
+                <span>01</span>
+                <strong>PCAP</strong>
+            </div>
+
+            <div class="pipeline-arrow">
+                →
+            </div>
+
+            <div class="pipeline-step">
+                <span>02</span>
+                <strong>Features</strong>
+            </div>
+
+            <div class="pipeline-arrow">
+                →
+            </div>
+
+            <div class="pipeline-step">
+                <span>03</span>
+                <strong>Baseline</strong>
+            </div>
+
+            <div class="pipeline-arrow">
+                →
+            </div>
+
+            <div class="pipeline-step">
+                <span>04</span>
+                <strong>Scoring</strong>
+            </div>
+
+            <div class="pipeline-arrow">
+                →
+            </div>
+
+            <div class="pipeline-step">
+                <span>05</span>
+                <strong>Classification</strong>
+            </div>
+
+            <div class="pipeline-arrow">
+                →
+            </div>
+
+            <div class="pipeline-step">
+                <span>06</span>
+                <strong>Incident</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     INCIDENT RESPONSE
+========================================================= -->
+
+<section class="panel incidents-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h2>
+                Incident Response History
+            </h2>
+
+            <p>
+                Recorded security incidents and PCAP evidence
+            </p>
+
+        </div>
+
+
+        <button
+            class="secondary-button"
+            onclick="loadIncidents()"
+        >
+            Refresh
+        </button>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Incident ID</th>
+
+                    <th>Threat</th>
+
+                    <th>Severity</th>
+
+                    <th>Score</th>
+
+                    <th>Status</th>
+
+                    <th>Evidence</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="incidentTable">
+
+                <tr>
+
+                    <td colspan="6">
+                        Loading incidents...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <p>
+        Secure Network Monitoring & Incident Response Platform
+    </p>
+
+    <p>
+        ECE Honours Project
+    </p>
+
+</footer>
+
+
+
+<script src="js/dashboard.js"></script>
+
+</body>
+
+</html>
